@@ -1,0 +1,9 @@
+body{
+    background: url("../images/texture.jpg") repeat;
+}
+#ufoCanvas{
+    border: thin solid #000;
+    margin: 0 auto;
+    display: block;
+    background: url('../images/cloud.jpg') no-repeat 100% 100%;
+}
