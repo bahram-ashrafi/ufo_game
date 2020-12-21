@@ -29,6 +29,11 @@ function GameBasics(canvas) {
         right: 800
     }
 
+    //initial values
+    this.level = 1;
+    this.score = 0;
+    this.shields = 2;
+
     this.setting = {
         //FPS: 60 frame per 1 second, this mean 1 new frame in every 0.01666667 seconds
         updateSeconds: (1 / 60),
@@ -42,7 +47,7 @@ GameBasics.prototype.presentPositions = function () {
     return this.positionContainer.length > 0 ? this.positionContainer[this.positionContainer.length - 1] : null
 }
 //Move to desired position
-GameBasics.prototype.goToPosition = function () {
+GameBasics.prototype.goToPosition = function (position) {
     //If we are already in a position clear the positionContainer
     if (this.presentPositions()) {
         this.positionContainer.length = 0;
@@ -65,12 +70,12 @@ GameBasics.prototype.popPosition = function () {
 GameBasics.prototype.start = function () {
     setInterval(function () { gameLoop(play); }, this.setting.updateSeconds * 1000); //0.01666667 sec * 1000 = 16.67 ms
     //Go into the opening position
-    this.goToPosition(new OpeningPosition())
+    this.goToPosition(new openingPosition())
 }
 const play = new GameBasics(canvas);
 play.start();
 function gameLoop(play) {
-    let presentPosition = play.presentPositions;
+    let presentPosition = play.presentPositions();
     if (presentPosition) {
         //update
         if (presentPosition.update) {
