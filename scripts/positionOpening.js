@@ -1,8 +1,7 @@
-function openingPosition() {
-
+function OpeningPosition() {
 }
 
-openingPosition.prototype.draw = function (play) {
+OpeningPosition.prototype.draw = function (play) {
     //UFO Hunter
     ctx.clearRect(0, 0, play.width, play.height);
     ctx.font = "80px Comic SansMS";
@@ -25,4 +24,9 @@ openingPosition.prototype.draw = function (play) {
     ctx.fillText("Left Arrow : Move Left", play.width / 2, play.height / 2 + 260);
     ctx.fillText("Right Arrow : Move Right", play.width / 2, play.height / 2 + 300);
     ctx.fillText("Space : Fire", play.width / 2, play.height / 2 + 340);
+}
+OpeningPosition.prototype.keyDown = function(play, keyboardCode){
+    if(keyboardCode == 32){
+        play.goToPosition(new TransferPosition(play.level));
+    }
 }

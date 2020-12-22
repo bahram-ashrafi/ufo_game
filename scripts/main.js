@@ -40,7 +40,10 @@ function GameBasics(canvas) {
     }
 
     //we collect here the different positions, states of the game
-    this.positionContainer = []
+    this.positionContainer = [];
+
+    // pressed keys storing
+    this.pressedKeys = {};
 }
 
 GameBasics.prototype.presentPositions = function () {
@@ -70,10 +73,25 @@ GameBasics.prototype.popPosition = function () {
 GameBasics.prototype.start = function () {
     setInterval(function () { gameLoop(play); }, this.setting.updateSeconds * 1000); //0.01666667 sec * 1000 = 16.67 ms
     //Go into the opening position
-    this.goToPosition(new openingPosition())
+    this.goToPosition(new OpeningPosition())
 }
-const play = new GameBasics(canvas);
-play.start();
+
+// Notifies the game when a key is pressed
+GameBasics.prototype.keyDown = function (keyboardCode){
+    // store the pressed key in 'pressedKeys'
+    this.pressedKeys[keyboardCode] = true;
+    //it calls the present position's keyDown function
+    if(this.presentPositions() && this.presentPositions().keyDown){
+        this.presentPositions().keyDown(this, keyboardCode);
+    }
+}
+
+// Notifies the game when a key is released
+GameBasics.prototype.keyUp = function (keyboardCode){
+    // delete the released key from 'pressedKeys'
+    delete this.pressedKeys[keyboardCode];
+}
+
 function gameLoop(play) {
     let presentPosition = play.presentPositions();
     if (presentPosition) {
@@ -88,3 +106,17 @@ function gameLoop(play) {
     }
 }
 
+//keyboard events listening
+window.addEventListener("keydown", function (e){
+    const keyboardCode = e.which || event.keyCode;
+    if(keyboardCode == 37 || keyboardCode == 39 || keyboardCode == 32){
+        e.preventDefault();
+    }
+    play.keyDown(keyboardCode);
+});
+window.addEventListener("keyup", function (e){
+    const keyboardCode = e.which || event.keyCode;
+    play.keyUp(keyboardCode);
+});
+const play = new GameBasics(canvas);
+play.start();
