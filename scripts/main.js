@@ -37,6 +37,7 @@ function GameBasics(canvas) {
     this.setting = {
         //FPS: 60 frame per 1 second, this mean 1 new frame in every 0.01666667 seconds
         updateSeconds: (1 / 60),
+        spaceshipSpeed: 400,
     }
 
     //we collect here the different positions, states of the game
@@ -80,6 +81,7 @@ GameBasics.prototype.start = function () {
 GameBasics.prototype.keyDown = function (keyboardCode){
     // store the pressed key in 'pressedKeys'
     this.pressedKeys[keyboardCode] = true;
+    console.log('keydownfunc');
     //it calls the present position's keyDown function
     if(this.presentPositions() && this.presentPositions().keyDown){
         this.presentPositions().keyDown(this, keyboardCode);
@@ -109,6 +111,7 @@ function gameLoop(play) {
 //keyboard events listening
 window.addEventListener("keydown", function (e){
     const keyboardCode = e.which || event.keyCode;
+    console.log('keydown');
     if(keyboardCode == 37 || keyboardCode == 39 || keyboardCode == 32){
         e.preventDefault();
     }

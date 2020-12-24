@@ -9,5 +9,4 @@ Objects.prototype.spaceship = function(x,y,spaceship_image){
     this.spaceship_image = spaceship_image;
     this.spaceship_image.src = "images/ship.png";
     return this;
-
 }
