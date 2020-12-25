@@ -42,6 +42,29 @@ InGamePosition.prototype.update = function (play) {
             bullets.splice(i--, 1);
         }
     }
+
+    //Movement of UFOS
+    let reachRight = false;
+    let reachLeft = false;
+
+    for(let i=0;i<this.ufos.length;i++){
+        let ufo = this.ufos[i];
+        let fresh_x = ufo.x + this.ufoSpeed * upSec * this.turnAround;
+
+        if(fresh_x > play.playBoundaries.right){
+            this.turnAround *= -1;
+            reachRight = true;
+        }
+
+        if(fresh_x < play.playBoundaries.left){
+            this.turnAround *= -1;
+            reachLeft = true;
+        }
+        if(!reachRight == true && !reachLeft==true) {
+            ufo.x = fresh_x;
+        }
+
+    }
 }
 InGamePosition.prototype.shoot = function () {
 
@@ -53,12 +76,17 @@ InGamePosition.prototype.shoot = function () {
 }
 
 InGamePosition.prototype.entry = function (play) {
+    this.turnAround = 1;
     this.upSec = this.setting.updateSeconds;
     this.spaceshipSpeed = this.setting.spaceshipSpeed;
     this.ufo_image = new Image();
     this.spaceship_image = new Image();
     this.object = new Objects();
     this.spaceship = this.object.spaceship((play.width / 2), play.playBoundaries.bottom, this.spaceship_image)
+
+    // values that change with levels(1.UFO speed 2.Bomb falling speed, 3.Bomb dropping frequency
+    let presentLevel = this.level;
+    this.ufoSpeed = this.setting.ufoSpeed + (presentLevel * 7);
 
     //Creating UFOS
     const lines = this.setting.ufoLines;
