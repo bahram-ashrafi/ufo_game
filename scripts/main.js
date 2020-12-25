@@ -1,5 +1,5 @@
 const canvas = document.getElementById('ufoCanvas');
-canvas.width = 900;
+canvas.width = 1200;
 canvas.height = 750;
 const ctx = canvas.getContext('2d');
 
@@ -24,9 +24,9 @@ function GameBasics(canvas) {
     //active playing fields
     this.playBoundaries = {
         top: 150,
-        bottom: 650,
+        bottom: canvas.height - 100,
         left: 100,
-        right: 800
+        right: canvas.width - 100,
     }
 
     //initial values
@@ -40,6 +40,10 @@ function GameBasics(canvas) {
         spaceshipSpeed: 200,
         bulletSpeed: 130,
         bulletMaxFrequency: 500, //How fast our spaceship can shoot one after another
+
+        ufoLines: 4,
+        ufoColumns: 8,
+        ufoSpeed: 35,
 
     }
 
