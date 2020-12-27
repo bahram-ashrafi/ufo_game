@@ -23,7 +23,7 @@ function GameBasics(canvas) {
 
     //active playing fields
     this.playBoundaries = {
-        top: 150,
+        top: 50,
         bottom: canvas.height - 100,
         left: 100,
         right: canvas.width - 100,
@@ -44,6 +44,7 @@ function GameBasics(canvas) {
         ufoLines: 4,
         ufoColumns: 8,
         ufoSpeed: 35,
+        ufoSinkingValue: 30, //that's how much the ufo sinks, value of sinking
 
     }
 
