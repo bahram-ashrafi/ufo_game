@@ -6,6 +6,7 @@ function InGamePosition(setting, level) {
     this.bullets = [];
     this.lastBulletTime = null;
     this.ufos = [];
+    this.bombs = [];
 }
 
 InGamePosition.prototype.update = function (play) {
@@ -84,11 +85,29 @@ InGamePosition.prototype.update = function (play) {
         }
     }
 
-    //temp
-    if(this.temp < 1){
-        this.temp++;
+    // Give a chance for bombing
+    for (let i = 0; i < this.setting.ufoColumns; i++) {
+        let ufo = frontLineUFOs[i];
+        if (!ufo) continue;
+        let chance = this.bombFrequency * upSec;
+        this.object = new Objects();
+        if (chance > Math.random()) {
+            //make a bomb object and put it into bombs array
+            this.bombs.push(this.object.bomb(ufo.x, ufo.y + ufo.height / 2));
 
+        }
     }
+
+    //Moving bombs
+    for (let i = 0; i < this.bombs.length; i++) {
+        let bomb = this.bombs[i];
+        bomb.y += upSec * this.bombSpeed;
+        //If a bomb falls out of the canvas it will be deleted
+        if(bomb.y > this.height){
+            this.bombs.splice(i--, 1);
+        }
+    }
+
 }
 InGamePosition.prototype.shoot = function () {
 
@@ -115,6 +134,10 @@ InGamePosition.prototype.entry = function (play) {
     // values that change with levels(1.UFO speed 2.Bomb falling speed, 3.Bomb dropping frequency
     let presentLevel = this.level;
     this.ufoSpeed = this.setting.ufoSpeed + (presentLevel * 7);
+    // 2. Bomb falling speed
+    this.bombSpeed = this.setting.bombSpeed + (presentLevel * 10);
+    // 3. Bomb dropping frequency
+    this.bombFrequency = this.setting.bombFrequency + (presentLevel * 0.05);
 
     //Creating UFOS
     const lines = this.setting.ufoLines;
@@ -125,7 +148,6 @@ InGamePosition.prototype.entry = function (play) {
 
     for (line = 0; line < lines; line++) {
         for (column = 0; column < columns; column++) {
-            console.log('for ufo')
             this.object = new Objects();
             let x, y;
             x = (play.width / 2) + (column * 80) - ((columns - 1) * 40);
@@ -158,11 +180,16 @@ InGamePosition.prototype.draw = function (play) {
         ctx.fillRect(bullet.x - 1, bullet.y - 6, 2, 6);
     }
 
-    //
+    // draw UFOS
     for (let i = 0; i < this.ufos.length; i++) {
-        console.log('draw ufo')
         let ufo = this.ufos[i];
         ctx.drawImage(this.ufo_image, ufo.x - (ufo.width / 2), ufo.y - (ufo.height / 2))
     }
 
+    //draw bombs
+    ctx.fillStyle = "#FE2EF7";
+    for (let i = 0; i < this.bombs.length; i++) {
+        let bomb = this.bombs[i];
+        ctx.fillRect(bomb.x - 2, bomb.y, 4, 6);
+    }
 }

@@ -46,7 +46,9 @@ function GameBasics(canvas) {
         ufoSpeed: 35,
         ufoSinkingValue: 30, //that's how much the ufo sinks, value of sinking
 
-    }
+        bombSpeed: 75,
+        bombFrequency: 0.05,
+    };
 
     //we collect here the different positions, states of the game
     this.positionContainer = [];
