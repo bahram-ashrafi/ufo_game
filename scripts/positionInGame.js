@@ -103,28 +103,53 @@ InGamePosition.prototype.update = function (play) {
         let bomb = this.bombs[i];
         bomb.y += upSec * this.bombSpeed;
         //If a bomb falls out of the canvas it will be deleted
-        if(bomb.y > this.height){
+        if (bomb.y > this.height) {
             this.bombs.splice(i--, 1);
         }
     }
 
     //UFO-bullet collision
-    for(let i =0; i<this.ufos.length;i++){
+    for (let i = 0; i < this.ufos.length; i++) {
         let ufo = this.ufos[i];
         let collision = false;
-        for(let j =0; j < bullets.length; j++){
+        for (let j = 0; j < bullets.length; j++) {
             let bullet = bullets[j];
             //collision check
-            if(bullet.x >=(ufo.x - ufo.width/2) && bullet.x <= (ufo.x + ufo.width/2) &&
-                bullet.y >= (ufo.y - ufo.height / 2) && bullet.y <= (ufo.y+ufo.height/2)){
+            if (bullet.x >= (ufo.x - ufo.width / 2) && bullet.x <= (ufo.x + ufo.width / 2) &&
+                bullet.y >= (ufo.y - ufo.height / 2) && bullet.y <= (ufo.y + ufo.height / 2)) {
                 //if there is collision we delete the bullet and set collision true
                 bullets.splice(j--, 1);
                 collision = true;
             }
         }
         //if there is collision we delete the UFO
-        if(collision == true){
+        if (collision == true) {
             this.ufos.splice(i--, 1);
+        }
+    }
+
+    for (let i = 0; i < this.bombs.length; i++) {
+        let bomb = this.bombs[i];
+        if (bomb.x + 2 >= (spaceship.x - spaceship.width / 2) &&
+            (bomb.x - 2 <= (spaceship.x + spaceship.width / 2)) &&
+            bomb.y + 6 >= (spaceship.y - spaceship.height / 2) &&
+            bomb.y <= (spaceship.y - spaceship.height / 2)) {
+            //if there is a collision we delete the bomb
+            this.bombs.splice(i--, 1);
+            // effect on the spaceship
+            play.goToPosition(new OpeningPosition());
+        }
+    }
+
+    //Spaceship-UFO collision
+    for (let i = 0; i < this.ufos.length; i++) {
+        let ufo = this.ufos[i];
+        if ((ufo.x + ufo.width / 2) > (spaceship.x - spaceship.width / 2) &&
+            (ufo.x - ufo.width / 2) < (spaceship.x + spaceship.width / 2) &&
+            (ufo.y + ufo.height / 2) > (spaceship.y - spaceship.height / 2) &&
+            (ufo.y - ufo.height / 2) < (spaceship.y + spaceship.height / 2)){
+            // if there is collision
+            play.goToPosition(new OpeningPosition());
         }
     }
 
