@@ -125,18 +125,21 @@ InGamePosition.prototype.update = function (play) {
         //if there is collision we delete the UFO
         if (collision == true) {
             this.ufos.splice(i--, 1);
+            play.sounds.playSound('death')
         }
     }
 
+    //Spaceship-bomb collision
     for (let i = 0; i < this.bombs.length; i++) {
         let bomb = this.bombs[i];
         if (bomb.x + 2 >= (spaceship.x - spaceship.width / 2) &&
             (bomb.x - 2 <= (spaceship.x + spaceship.width / 2)) &&
             bomb.y + 6 >= (spaceship.y - spaceship.height / 2) &&
             bomb.y <= (spaceship.y - spaceship.height / 2)) {
+            // effect on the spaceship
+            play.sounds.playSound('explosion');
             //if there is a collision we delete the bomb
             this.bombs.splice(i--, 1);
-            // effect on the spaceship
             play.goToPosition(new OpeningPosition());
         }
     }
@@ -147,19 +150,22 @@ InGamePosition.prototype.update = function (play) {
         if ((ufo.x + ufo.width / 2) > (spaceship.x - spaceship.width / 2) &&
             (ufo.x - ufo.width / 2) < (spaceship.x + spaceship.width / 2) &&
             (ufo.y + ufo.height / 2) > (spaceship.y - spaceship.height / 2) &&
-            (ufo.y - ufo.height / 2) < (spaceship.y + spaceship.height / 2)){
+            (ufo.y - ufo.height / 2) < (spaceship.y + spaceship.height / 2)) {
             // if there is collision
+            play.sounds.playSound('explosion');
             play.goToPosition(new OpeningPosition());
         }
     }
 
 }
+
 InGamePosition.prototype.shoot = function () {
 
     if (this.lastBulletTime === null || ((new Date()).getTime() - this.lastBulletTime) > (this.setting.bulletMaxFrequency)) {
         this.object = new Objects();
         this.bullets.push(this.object.bullet(this.spaceship.x, this.spaceship.y - this.spaceship.height / 2, this.setting.bulletSpeed));
         this.lastBulletTime = (new Date()).getTime();
+        play.sounds.playSound('shoot');
     }
 }
 
