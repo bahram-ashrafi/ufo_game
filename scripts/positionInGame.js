@@ -217,7 +217,12 @@ InGamePosition.prototype.entry = function (play) {
 }
 
 InGamePosition.prototype.keyDown = function (play, keyboardCode) {
-
+    if(keyboardCode==83){
+        play.sounds.mute();
+    }
+    if(keyboardCode==80){
+        play.pushPosition(new PausePosition());
+    }
 }
 
 InGamePosition.prototype.draw = function (play) {
@@ -243,4 +248,19 @@ InGamePosition.prototype.draw = function (play) {
         let bomb = this.bombs[i];
         ctx.fillRect(bomb.x - 2, bomb.y, 4, 6);
     }
+
+    // draw Sound & Mute info
+    ctx.font = "16px Comic Sans MS";
+
+    ctx.fillStyle = "#424242";
+    ctx.textAlign = "left";
+    ctx.fillText("Press S to switch sound effect ON/OFF. Sound:", play.playBoundaries.left, play.playBoundaries.bottom+70);
+
+    let soundStatus = (play.sounds.muted === true) ? "OFF" : "ON";
+    ctx.fillStyle = (play.sounds.muted === true) ? '#FF0000' : '#0B6121';
+    ctx.fillText(soundStatus, play.playBoundaries.left + 375, play.playBoundaries.bottom+70);
+
+    ctx.fillStyle = "#424242";
+    ctx.textAlign = "right";
+    ctx.fillText("Press P to Pause.", play.playBoundaries.right, play.playBoundaries.bottom+70);
 }
