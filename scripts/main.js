@@ -48,6 +48,8 @@ function GameBasics(canvas) {
 
         bombSpeed: 75,
         bombFrequency: 0.05,
+
+        pointsPerUFO: 25,
     };
 
     //we collect here the different positions, states of the game

@@ -120,6 +120,7 @@ InGamePosition.prototype.update = function (play) {
                 //if there is collision we delete the bullet and set collision true
                 bullets.splice(j--, 1);
                 collision = true;
+                play.score += this.setting.pointsPerUFO;
             }
         }
         //if there is collision we delete the UFO
@@ -155,6 +156,12 @@ InGamePosition.prototype.update = function (play) {
             play.sounds.playSound('explosion');
             play.goToPosition(new OpeningPosition());
         }
+    }
+
+    //Level completed
+    if(this.ufos.length == 0){
+        play.level +=1;
+        play.goToPosition(new TransferPosition(play.level));
     }
 
 }
@@ -217,10 +224,10 @@ InGamePosition.prototype.entry = function (play) {
 }
 
 InGamePosition.prototype.keyDown = function (play, keyboardCode) {
-    if(keyboardCode==83){
+    if (keyboardCode == 83) {
         play.sounds.mute();
     }
-    if(keyboardCode==80){
+    if (keyboardCode == 80) {
         play.pushPosition(new PausePosition());
     }
 }
@@ -254,13 +261,27 @@ InGamePosition.prototype.draw = function (play) {
 
     ctx.fillStyle = "#424242";
     ctx.textAlign = "left";
-    ctx.fillText("Press S to switch sound effect ON/OFF. Sound:", play.playBoundaries.left, play.playBoundaries.bottom+70);
+    ctx.fillText("Press S to switch sound effect ON/OFF. Sound:", play.playBoundaries.left, play.playBoundaries.bottom + 70);
 
     let soundStatus = (play.sounds.muted === true) ? "OFF" : "ON";
     ctx.fillStyle = (play.sounds.muted === true) ? '#FF0000' : '#0B6121';
-    ctx.fillText(soundStatus, play.playBoundaries.left + 375, play.playBoundaries.bottom+70);
+    ctx.fillText(soundStatus, play.playBoundaries.left + 375, play.playBoundaries.bottom + 70);
 
     ctx.fillStyle = "#424242";
     ctx.textAlign = "right";
-    ctx.fillText("Press P to Pause.", play.playBoundaries.right, play.playBoundaries.bottom+70);
+    ctx.fillText("Press P to Pause.", play.playBoundaries.right, play.playBoundaries.bottom + 70);
+
+    //show the score and level to the user
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#BDBDBD";
+
+    ctx.font = "bold 24px Comic Sans MS";
+    ctx.fillText("Score", play.playBoundaries.right, play.playBoundaries.top - 25);
+    ctx.font = "bold 30px Comic Sans MS";
+    ctx.fillText(play.score, play.playBoundaries.right, play.playBoundaries.top);
+
+    ctx.font = "bold 24px Comic Sans MS";
+    ctx.fillText("Level", play.playBoundaries.left, play.playBoundaries.top - 25);
+    ctx.font = "bold 30px Comic Sans MS";
+    ctx.fillText(play.level, play.playBoundaries.left, play.playBoundaries.top);
 }
