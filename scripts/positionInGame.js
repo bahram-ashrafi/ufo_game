@@ -141,7 +141,8 @@ InGamePosition.prototype.update = function (play) {
             play.sounds.playSound('explosion');
             //if there is a collision we delete the bomb
             this.bombs.splice(i--, 1);
-            play.goToPosition(new OpeningPosition());
+            // play.goToPosition(new OpeningPosition());
+            play.shields--;
         }
     }
 
@@ -154,8 +155,13 @@ InGamePosition.prototype.update = function (play) {
             (ufo.y - ufo.height / 2) < (spaceship.y + spaceship.height / 2)) {
             // if there is collision
             play.sounds.playSound('explosion');
-            play.goToPosition(new OpeningPosition());
+            // play.goToPosition(new OpeningPosition());
+            play.shields = -1;
         }
+    }
+
+    if(play.shields<0){
+        play.goToPosition(new OpeningPosition())
     }
 
     //Level completed
@@ -284,4 +290,20 @@ InGamePosition.prototype.draw = function (play) {
     ctx.fillText("Level", play.playBoundaries.left, play.playBoundaries.top - 25);
     ctx.font = "bold 30px Comic Sans MS";
     ctx.fillText(play.level, play.playBoundaries.left, play.playBoundaries.top);
+
+    //draw Shields
+    ctx.textAlign = "center";
+    if(play.shields > 0){
+        ctx.fillStyle = '#BDBDBD';
+        ctx.font = "bold 24px Comic Sans MS";
+        ctx.fillText("Shields", play.width/2, play.playBoundaries.top - 25);
+        ctx.font = "bold 30px Comic Sans MS";
+        ctx.fillText(play.shields, play.width/2, play.playBoundaries.top);
+    } else{
+        ctx.fillStyle = '#ff4d4d';
+        ctx.font = "bold 24px Comic Sans MS";
+        ctx.fillText("Warning", play.width/2, play.playBoundaries.top - 25);
+        ctx.fillStyle = '#BDBDBD';
+        ctx.fillText('No shields left!', play.width/2, play.playBoundaries.top);
+    }
 }
