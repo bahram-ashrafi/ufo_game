@@ -30,6 +30,6 @@ PausePosition.prototype.keyDown = function(play, keyboardCode){
         play.popPosition();
     }
     if(keyboardCode==27){
-        play.pushPosition(new OpeningPosition());
+        play.pushPosition(new GameOverPosition());
     }
 }

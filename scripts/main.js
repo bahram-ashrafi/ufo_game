@@ -30,7 +30,7 @@ function GameBasics(canvas) {
     }
 
     //initial values
-    this.level = 1;
+    this.level = 10;
     this.score = 0;
     this.shields = 2;
 

@@ -161,7 +161,7 @@ InGamePosition.prototype.update = function (play) {
     }
 
     if(play.shields<0){
-        play.goToPosition(new OpeningPosition())
+        play.goToPosition(new GameOverPosition())
     }
 
     //Level completed
@@ -196,7 +196,7 @@ InGamePosition.prototype.entry = function (play) {
     this.spaceship = this.object.spaceship((play.width / 2), play.playBoundaries.bottom, this.spaceship_image);
 
     // values that change with levels(1.UFO speed 2.Bomb falling speed, 3.Bomb dropping frequency
-    let presentLevel = this.level;
+    let presentLevel = this.level < 11 ? this.level : 10;
     this.ufoSpeed = this.setting.ufoSpeed + (presentLevel * 7);
     // 2. Bomb falling speed
     this.bombSpeed = this.setting.bombSpeed + (presentLevel * 10);
